@@ -1,3 +1,6 @@
+# Usage
+Example command to start server: `cargo run --release -- -i -c --db_address "postgres@localhost:5432" -p 8000`
+
 # Development
 ## Linters and scanners
 
