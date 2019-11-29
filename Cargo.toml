@@ -1,0 +1,14 @@
+[package]
+name = "rustyauth"
+version = "0.0.1"
+authors = ["Martin Weidner <martin.weidner.wt@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+rouille = "3.0.0"
+bcrypt = "0.6.1"
+postgres = "0.15.2"
+rand = "0.7.2"
+uuid = { version = "0.8.1", features = ["v4"] }
+json = "0.12.0"
+clap = "2.33.0"
