@@ -43,6 +43,7 @@ trait LoadStoreClient {
 
     fn store_client_code(&self, client_id: &String, user_id: i32, code: &String, scopes: &String);
     fn has_client_code(&self, client_id: &String, code: &String) -> bool;
+    fn login_client(&self, client_id: &String);
     fn delete_client_code(&self, client_id: &String, code: &String);
 
     fn store_user(&self, u: &User);
@@ -98,6 +99,16 @@ impl LoadStoreClient for PostgresClient {
             return true;
         }
         false
+    }
+
+
+    fn login_client(&self, client_id: &String) {
+        self.c
+            .execute(
+                "update rustyauth.clients set last_login=current_timestamp where client_id=$1",
+                &[client_id],
+            )
+            .unwrap();
     }
 
     fn delete_client_code(&self, client_id: &String, code: &String) {
@@ -464,7 +475,7 @@ fn verify_client(db_client: &PostgresClient, client_id: &String, client_secret: 
     let valid = verify(client_secret, &client.unwrap().client_secret).unwrap();
     if valid {
         // update time of last login
-        // conn.execute("update rustyauth.clients set last_login=current_timestamp where username=$1", &[&username]).unwrap();
+        db_client.login_client(client_id);
         true
     } else {
         // verify(password, &"".to_string()).unwrap();  // consume the same time to mitigate timing attacks
